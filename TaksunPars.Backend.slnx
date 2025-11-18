@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/TaksunPars.Api/TaksunPars.Api.csproj" />
+  <Project Path="src/TaksunPars.Application/TaksunPars.Application.csproj" />
+  <Project Path="src/TaksunPars.Core/TaksunPars.Core.csproj" />
+  <Project Path="src/TaksunPars.Infrastructure/TaksunPars.Infrastructure.csproj" />
+</Solution>

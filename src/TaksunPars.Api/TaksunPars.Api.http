@@ -1,0 +1,6 @@
+@TaksunPars.Api_HostAddress = http://localhost:5023
+
+GET {{TaksunPars.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
