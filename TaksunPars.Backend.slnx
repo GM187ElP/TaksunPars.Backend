@@ -3,4 +3,5 @@
   <Project Path="src/TaksunPars.Application/TaksunPars.Application.csproj" />
   <Project Path="src/TaksunPars.Core/TaksunPars.Core.csproj" />
   <Project Path="src/TaksunPars.Infrastructure/TaksunPars.Infrastructure.csproj" />
+  <Project Path="src/TaksunPars.Shared/TaksunPars.Shared.csproj" />
 </Solution>
