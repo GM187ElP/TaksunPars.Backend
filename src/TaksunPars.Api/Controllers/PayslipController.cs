@@ -4,7 +4,7 @@ using TaksunPars.Application.Services;
 namespace TaksunPars.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class PayslipController : Controller
 {
     private readonly ILogger<PayslipController> _logger;

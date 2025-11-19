@@ -5,7 +5,7 @@ using TaksunPars.Application.Services;
 namespace TaksunPars.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthServices _authServices;
@@ -20,13 +20,20 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
+        if (dto == null)
+            return BadRequest(new { Message = "Request body cannot be null." });
+
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var token = await _authServices.LoginAsync(dto.Username, dto.Password);
 
         if (string.IsNullOrEmpty(token))
+        {
+            _logger.LogWarning("Failed login attempt for username: {username}", dto.Username);
             return Unauthorized(new { Message = "Invalid username or password." });
+        }
+
 
         return Ok(new { Token = token });
     }

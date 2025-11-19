@@ -1,7 +1,14 @@
 <Solution>
-  <Project Path="src/TaksunPars.Api/TaksunPars.Api.csproj" />
-  <Project Path="src/TaksunPars.Application/TaksunPars.Application.csproj" />
-  <Project Path="src/TaksunPars.Core/TaksunPars.Core.csproj" />
-  <Project Path="src/TaksunPars.Infrastructure/TaksunPars.Infrastructure.csproj" />
-  <Project Path="src/TaksunPars.Shared/TaksunPars.Shared.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/TaksunPars.Api/TaksunPars.Api.csproj" />
+    <Project Path="src/TaksunPars.Application/TaksunPars.Application.csproj" />
+    <Project Path="src/TaksunPars.Core/TaksunPars.Core.csproj" />
+    <Project Path="src/TaksunPars.Infrastructure/TaksunPars.Infrastructure.csproj" />
+    <Project Path="src/TaksunPars.Shared/TaksunPars.Shared.csproj" />
+  </Folder>
+  <Folder Name="/src/UI/">
+    <Project Path="src/TaksunPars.UI/TaksunPars.UI.Client/TaksunPars.UI.Client.csproj" />
+    <Project Path="src/TaksunPars.UI/TaksunPars.UI/TaksunPars.UI.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
 </Solution>

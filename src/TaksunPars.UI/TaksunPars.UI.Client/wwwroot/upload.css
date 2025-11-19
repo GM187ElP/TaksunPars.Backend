@@ -1,0 +1,45 @@
+/* Beautiful upload component styles for Upload.razor */
+.upload-container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 2rem 2.5rem;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+    text-align: center;
+}
+.upload-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #2d3748;
+}
+.upload-input {
+    margin: 1.5rem 0;
+    padding: 1.2rem;
+    border: 2px dashed #3182ce;
+    border-radius: 10px;
+    background: #f7fafc;
+    transition: border-color 0.2s;
+    width: 100%;
+    cursor: pointer;
+}
+.upload-input:hover {
+    border-color: #2b6cb0;
+}
+.alert {
+    margin: 1rem 0;
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+.alert-success {
+    background: #e6fffa;
+    color: #2c7a7b;
+    border: 1px solid #b2f5ea;
+}
+.alert-danger {
+    background: #fff5f5;
+    color: #c53030;
+    border: 1px solid #feb2b2;
+}

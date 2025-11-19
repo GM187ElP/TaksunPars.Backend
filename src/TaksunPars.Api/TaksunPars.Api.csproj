@@ -8,10 +8,19 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\TaksunPars.Application\TaksunPars.Application.csproj"/>
+        <ProjectReference Include="..\TaksunPars.Infrastructure\TaksunPars.Infrastructure.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="Private\secrets.json"/>
     </ItemGroup>
 
 </Project>

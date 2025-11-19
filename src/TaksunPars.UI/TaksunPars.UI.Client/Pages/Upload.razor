@@ -1,0 +1,170 @@
+﻿@page "/upload-payslips"
+@using Microsoft.AspNetCore.Components.Forms
+@inject HttpClient Http
+
+<PageTitle>Upload Payslips</PageTitle>
+
+
+<style>
+    .upload-container {
+        max-width: 500px;
+        margin: 2.5rem auto;
+        padding: 2rem 2.5rem 2.5rem 2.5rem;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(44, 62, 80, 0.10);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        direction: rtl;
+    }
+    .page-header {
+        margin-bottom: 1.5rem;
+        text-align: right;
+    }
+    .page-header h2 {
+        color: #2c3e50;
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+    }
+    .header-divider {
+        height: 4px;
+        width: 60px;
+        background: linear-gradient(90deg, #FFD700, #FFA500);
+        border-radius: 2px;
+        margin-bottom: 1.5rem;
+    }
+    .alert {
+        padding: 0.9rem 1.2rem;
+        border-radius: 8px;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 500;
+        font-size: 1rem;
+        animation: slideIn 0.3s ease;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    .alert-icon {
+        font-size: 1.3rem;
+    }
+    keyframes slideIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .upload-label {
+        display: block;
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 0.7rem;
+        font-size: 1.05rem;
+    }
+    .upload-input {
+        width: 100%;
+        padding: 1.1rem 1rem;
+        border: 2px dashed #FFD700;
+        border-radius: 10px;
+        background: #fafafa;
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+        margin-bottom: 1.2rem;
+    }
+    .upload-input:hover, .upload-input:focus {
+        border-color: #FFA500;
+        background: #fffbe6;
+        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.08);
+    }
+    .upload-loading {
+        color: #FFA500;
+        font-size: 1.1rem;
+        margin: 1rem 0;
+    }
+</style>
+
+<div class="upload-container">
+    <div class="page-header">
+        <h2>بارگذاری فیش حقوقی</h2>
+        <div class="header-divider"></div>
+    </div>
+
+    @if (_isLoading)
+    {
+        <div class="upload-loading">در حال بارگذاری فایل‌ها...</div>
+    }
+    else if (!string.IsNullOrEmpty(_message))
+    {
+        <div class="alert @( _isSuccess ? "alert-success" : "alert-danger")">
+            <span class="alert-icon">@(_isSuccess ? "✓" : "✕")</span>
+            @_message
+        </div>
+    }
+
+    <label class="upload-label" for="file-upload">انتخاب فایل‌ Excel (xlsx, xls, xlsm)</label>
+    <InputFile id="file-upload" class="upload-input" OnChange="HandleFileSelected" accept=".xlsx,.xls,.xlsm" />
+</div>
+
+@code {
+    private bool _isLoading;
+    private string _message = string.Empty;
+    private bool _isSuccess;
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        _isLoading = true;
+        _message = string.Empty;
+
+        try
+        {
+            var content = new MultipartFormDataContent();
+
+            foreach (var file in e.GetMultipleFiles())
+            {
+                // copy the stream into a MemoryStream to ensure it's seekable and disposed correctly
+                using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+                var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                ms.Position = 0;
+
+                var fileContent = new StreamContent(ms);
+                fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                content.Add(fileContent, "files", file.Name);
+            }
+
+            // POST to API (relative to the client's base address). If your API runs on a different origin,
+            // change this to the absolute API URL or register a named HttpClient in Program.cs.
+            var response = await Http.PostAsync("payslips/upload", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                _message = "Files uploaded successfully!";
+                _isSuccess = true;
+            }
+            else
+            {
+                var serverText = await response.Content.ReadAsStringAsync();
+                _message = $"Upload failed: {response.StatusCode}. {serverText}";
+                _isSuccess = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            _message = $"Error: {ex.Message}";
+            _isSuccess = false;
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
+}
