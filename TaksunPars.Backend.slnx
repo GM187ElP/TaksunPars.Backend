@@ -7,8 +7,8 @@
     <Project Path="src/TaksunPars.Shared/TaksunPars.Shared.csproj" />
   </Folder>
   <Folder Name="/src/UI/">
-    <Project Path="src/TaksunPars.UI/TaksunPars.UI.Client/TaksunPars.UI.Client.csproj" />
-    <Project Path="src/TaksunPars.UI/TaksunPars.UI/TaksunPars.UI.csproj" />
+    <Project Path="../TasksunPars/src/TaksunPars.UI/TaksunPars.Client/TaksunPars.Client.csproj" />
+    <Project Path="src/TaksunPars.UI/TaksunPars.UI/TaksunPars.UI.csproj" Id="ab452045-fcd3-464c-bd3e-3757288d781f" />
   </Folder>
   <Folder Name="/tests/" />
 </Solution>

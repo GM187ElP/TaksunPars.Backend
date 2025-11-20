@@ -1,38 +1,30 @@
-using TaksunPars.UI.Components;
-using _Imports = TaksunPars.UI.Client._Imports;
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveWebAssemblyComponents();
-builder.Services.AddHttpClient("ApiClient", client =>
-{
-    client.BaseAddress = new Uri("http://localhost:5023"); 
-});
+// Optional: static file hosting for WASM updates or CDN-like behavior
+builder.Services.AddDirectoryBrowser();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
-}
-else
-{
-    app.UseExceptionHandler("/Error", true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseExceptionHandler("/error");
 }
 
-app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
-app.UseHttpsRedirection();
+// Do NOT use HTTPS redirect
+// Do NOT use HSTS
+// Do NOT use Antiforgery
+// Do NOT map Razor components
+// Do NOT run WASM debugging
 
-app.UseAntiforgery();
+// Static files (WASM bundle, css, js)
+app.UseStaticFiles(new StaticFileOptions
+{
+    ServeUnknownFileTypes = true
+});
 
-app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(_Imports).Assembly);
+app.UseDirectoryBrowser();
+
+// You can put version.json here for Telegram-style updates
+// app.MapGet("/version", () => "1.0.0");
 
 app.Run();

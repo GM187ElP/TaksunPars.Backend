@@ -17,8 +17,10 @@ public class PayslipController : Controller
     }
 
     [HttpPost("upload")]
-    public async Task<IActionResult> Upload(int employeeId)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Upload( IFormFile payslipFile)
     {
-        return Ok();
+        var result = await _paySlipServices.UploadAsync(payslipFile);
+        return Ok(result);
     }
 }

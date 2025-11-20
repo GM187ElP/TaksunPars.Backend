@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using Npgsql;
 using TaksunPars.Application.Services;
 using TaksunPars.Infrastructure.Data;
@@ -6,17 +8,15 @@ using TaksunPars.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Add services
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
-// In Program.cs
+// Register application services
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<IPaySlipServices, PaySlipServices>();
 builder.Services.AddScoped<IPersonnelServices, PersonnelServices>();
 
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -27,45 +27,71 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Secrets for development
 if (builder.Environment.IsDevelopment())
+{
     builder.Configuration.AddJsonFile(
         Path.Combine("Private", "secrets.json"),
-        false,
-        true
+        optional: false,
+        reloadOnChange: true
     );
+}
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (string.IsNullOrEmpty(connectionString))
-    throw new InvalidOperationException("Connection string 'DefaultConnection' not found in appsettings.json");
+// Swagger / Swashbuckle
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "My API",
+        Version = "v1"
+    });
+});
 
-var dbPassword = builder.Configuration["secrets:Password"];
-if (string.IsNullOrEmpty(dbPassword))
-    throw new InvalidOperationException(
-        "Database password not found. Check Private/secrets.json exists and contains 'secrets:Password'");
+// Connection string
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found in appsettings.json");
+
+var dbPassword = builder.Configuration["secrets:Password"]
+    ?? throw new InvalidOperationException("Database password not found. Check Private/secrets.json");
 
 Console.WriteLine($"✅ Password loaded successfully: {dbPassword.Length} characters");
 
-var cs = new NpgsqlConnectionStringBuilder(connectionString);
-cs.Password = dbPassword;
+var cs = new NpgsqlConnectionStringBuilder(connectionString)
+{
+    Password = dbPassword
+};
 
 Console.WriteLine(
-    $"✅ Connection string built: Host={cs.Host}, Database={cs.Database}, Username={cs.Username}, PasswordSet={!string.IsNullOrEmpty(cs.Password)}");
+    $"✅ Connection string built: Host={cs.Host}, Database={cs.Database}, Username={cs.Username}, PasswordSet={(!string.IsNullOrEmpty(cs.Password))}"
+);
 
-builder.Services.AddDbContext<AppDbContext>(options => { options.UseNpgsql(cs.ToString()); });
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(cs.ToString());
+});
 
 
 var app = builder.Build();
 
-// Enable CORS
+
+// Middleware pipeline
 app.UseCors();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+// Swagger (order matters!)
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
 
+// HTTPS
 app.UseHttpsRedirection();
 
+// Auth (keep even if no JWT yet)
 app.UseAuthorization();
 
+// Controllers
 app.MapControllers();
 
+// Run
 app.Run();
