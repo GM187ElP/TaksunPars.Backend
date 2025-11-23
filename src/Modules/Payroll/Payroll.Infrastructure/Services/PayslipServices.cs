@@ -7,7 +7,7 @@ using TaksunPars.Core.Entities;
 using TaksunPars.Infrastructure.Data;
 using TaksunPars.Shared;
 
-namespace TaksunPars.Infrastructure.Services;
+namespace Payroll.Infrastructure.Services;
 
 public class PaySlipServices(AppDbContext dbContext, IPersonnelServices personnelServices) : IPaySlipServices
 {

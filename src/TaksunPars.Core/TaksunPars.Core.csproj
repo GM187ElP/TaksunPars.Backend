@@ -7,7 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\TaksunPars.Shared\TaksunPars.Shared.csproj"/>
+      <PackageReference Include="QuestPDF" Version="2025.7.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\TaksunPars.Shared\TaksunPars.Shared.csproj" />
     </ItemGroup>
 
 </Project>

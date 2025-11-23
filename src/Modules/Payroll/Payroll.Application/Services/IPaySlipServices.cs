@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using TaksunPars.Shared;
 
-namespace TaksunPars.Application.Services;
+namespace Payroll.Application.Services;
 
 public interface IPaySlipServices
 {
