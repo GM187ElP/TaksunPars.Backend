@@ -6,7 +6,6 @@ public class Payslip
 
     // کد پرسنلی - Personnel Reference
     public string PersonnelCode { get; set; } // Common between personnel and payslip
-    public Guid PersonnelId { get; set; }
 
     // سال و ماه
     public string Year { get; set; } // سال
@@ -60,6 +59,7 @@ public class Payslip
     public long CompanyDeductions { get; set; } // کسورات شرکت
     public long NetPayable { get; set; } // خالص پرداختی
 
-    // Navigation property
-    public Personnel Personnel { get; set; }
+
+    // مرجع پرسنلی
+    public Guid PersonnelId { get; set; }
 }
