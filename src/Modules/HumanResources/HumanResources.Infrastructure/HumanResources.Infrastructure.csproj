@@ -7,8 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\" />
+    <Compile Remove="Persistence\NewFolder\**" />
+    <EmbeddedResource Remove="Persistence\NewFolder\**" />
+    <None Remove="Persistence\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HumanResources.Domain\HumanResources.Domain.csproj" />
   </ItemGroup>
 
 </Project>

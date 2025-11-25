@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Shared.Interfaces;
 
 namespace HumanResources.Domain.Entities;
-public class BankName
+
+public class BankName : ISoftDelete
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
+    public bool IsDeleted { get; set; } = false;
 }

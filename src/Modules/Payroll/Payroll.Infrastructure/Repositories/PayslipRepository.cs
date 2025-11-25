@@ -1,10 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Payroll.Domain.Entities;
+using Payroll.Domain.Interfaces;
+using Payroll.Infrastructure.Persistence;
 
-namespace Payroll.Infrastructure.Repositories
+namespace Payroll.Infrastructure.Repositories;
+
+public class PayslipRepository: IPayslipRepository
 {
-    internal class PayslipRepository
+    private readonly PayrollDbContext _dbContext;
+
+    public PayslipRepository(PayrollDbContext dbContext)
     {
+        _dbContext = dbContext;
+    }
+
+    public Task AddRangeAsync(IEnumerable<Payslip> payslips, CancellationToken ct)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,34 +1,30 @@
 <Solution>
-  <Folder Name="/src/">
-    <Project Path="src/TaksunPars.Application/TaksunPars.Application.csproj" />
-    <Project Path="src/TaksunPars.Core/TaksunPars.Core.csproj" />
-    <Project Path="src/TaksunPars.Infrastructure/TaksunPars.Infrastructure.csproj" />
-    <Project Path="src/TaksunPars.Shared/TaksunPars.Shared.csproj" />
-  </Folder>
+  <Folder Name="/src/" />
   <Folder Name="/src/Api/">
-    <Project Path="src/ERP.Api/ERP.Api.csproj" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/ERP.Api/ERP.Api.csproj" />
   </Folder>
-  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/">
+    <Project Path="src/Modules/Shared/Shared.csproj" Id="8e571a5c-0f29-440a-93fb-2cc970907033" />
+  </Folder>
   <Folder Name="/src/Modules/HumanResources/">
-    <Project Path="src/Modules/HumanResources/HumanResources.Application/HumanResources.Application.csproj" />
-    <Project Path="src/Modules/HumanResources/HumanResources.Domain/HumanResources.Domain.csproj" />
-    <Project Path="src/Modules/HumanResources/HumanResources.Infrastructure/HumanResources.Infrastructure.csproj" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/Modules/HumanResources/HumanResources.Application/HumanResources.Application.csproj" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/Modules/HumanResources/HumanResources.Domain/HumanResources.Domain.csproj" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/Modules/HumanResources/HumanResources.Infrastructure/HumanResources.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/Modules/IAM/">
-    <Project Path="src/IAM/IAM.Application/IAM.Application.csproj" Id="9bef9190-96f7-49e9-8521-558bebfc9fc9" />
-    <Project Path="src/IAM/IAM.Domain/IAM.Domain.csproj" Id="55a4eabf-cd78-4174-93fa-df5fa0ba0193" />
-    <Project Path="src/IAM/IAM.Infrastructure/IAM.Infrastructure.csproj" Id="1984f80f-2648-4338-b45f-b3ab33dde665" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/Modules/IAM/IAM.Application/IAM.Application.csproj" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/Modules/IAM/IAM.Domain/IAM.Domain.csproj" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/Modules/IAM/IAM.Infrastructure/IAM.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/Modules/Payroll/">
-    <Project Path="src/Payroll/HumanResources.Infrastructure/Payroll.Infrastructure/Payroll.Infrastructure.csproj" Id="c69d988e-d5b3-4b79-bc0d-dfb8a47018d5" />
-    <Project Path="src/Payroll/Payroll.Application/Payroll.Application.csproj" Id="d95611f5-0809-494b-b159-841648f713d7" />
-    <Project Path="src/Payroll/Payroll.Domain/Payroll.Domain.csproj" Id="065511d1-32b6-4e2d-9421-fe9d07e08c6e" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/Modules/Payroll/Payroll.Application/Payroll.Application.csproj" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/Modules/Payroll/Payroll.Domain/Payroll.Domain.csproj" />
+    <Project Path="E:/C/CS/TasksunPars/TaksunPars.Backend/src/Modules/Payroll/Payroll.Infrastructure/Payroll.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/UI/" />
   <Folder Name="/src/UI/Blazor/">
-    <Project Path="../TasksunPars/src/ERP.UI/Blazor/ERP.UI.Blazor/ERP.UI.Blazor.csproj" />
+    <Project Path="E:/C/CS/TasksunPars/TasksunPars/src/ERP.UI/Blazor/ERP.UI.Blazor/ERP.UI.Blazor.csproj" />
   </Folder>
+  <Folder Name="/src/zzzzzzzzzz/" />
   <Folder Name="/tests/" />
-  <Project Path="BlazorApp1/BlazorApp1.Client/BlazorApp1.Client.csproj" Id="539677d1-e8ec-4c07-b7c7-7361dad4236e" />
-  <Project Path="BlazorApp1/BlazorApp1/BlazorApp1.csproj" Id="7e70a227-8774-4802-8e33-ba459ebfcbf4" />
 </Solution>

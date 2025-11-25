@@ -1,33 +1,27 @@
 ﻿using ClosedXML.Excel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using TaksunPars.Application.DTOs;
-using TaksunPars.Application.Services;
-using TaksunPars.Core.Entities;
-using TaksunPars.Infrastructure.Data;
-using TaksunPars.Shared;
+using Payroll.Application.Common.Interfaces;
+using Payroll.Domain.Entities;
+using Shared;
 
-namespace Payroll.Infrastructure.Services;
+namespace Payroll.Infrastructure.Parsing;
 
-public class PaySlipServices(AppDbContext dbContext, IPersonnelServices personnelServices) : IPaySlipServices
+public class ClosedXmlPayslipParser : IExcelPayslipParser
 {
-    private readonly AppDbContext _dbContext = dbContext;
-    private readonly IPersonnelServices _personnelServices = personnelServices;
-
-    public async Task<Result> UploadAsync(IFormFile paySlipFile)
+    public Result<List<Payslip>> Parse(Stream paySlipFile)
     {
-        using var workbook = new XLWorkbook(paySlipFile.OpenReadStream());
+        using var workbook = new XLWorkbook(paySlipFile);
 
         var ws = workbook.Worksheet(1);
 
-        var result = new Result();
+        var result = new Result<List<Payslip>>();
 
         var year = ParseInt(ws.Cell(1, 1).GetString()).ToString();
         var month = ParseInt(ws.Cell(2, 1).GetString()).ToString();
 
         if (year == "0" || month == "0")
         {
-            result.Errors.Add("ماه و سال وارد شده معتبر نمی‌باشد.");
+            result.Status.Errors.Add("ماه و سال وارد شده معتبر نمی‌باشد.");
             return result;
         }
 
@@ -40,24 +34,16 @@ public class PaySlipServices(AppDbContext dbContext, IPersonnelServices personne
             {
                 var payslip = new Payslip();
 
-                var pc = ParseInt(row.Cell(3).GetString()).ToString();
-                if (pc == "0")
+                var ec = ParseInt(row.Cell(3).GetString()).ToString();
+                if (ec == "0")
                 {
-                    result.Errors.Add($"کد پرسنلی وارد شده ردیف {rows.IndexOf(row) + 1} معتبر نمی‌باشد.");
-                    continue;
-                }
-
-                var p = await _personnelServices.GetPersonnelByPersonnelCodeAsync(pc);
-                if (p == null)
-                {
-                    result.Errors.Add($"پرسنل با کد {pc} یافت نشد.");
+                    result.Status.Errors.Add($"کد پرسنلی وارد شده ردیف {rows.IndexOf(row) + 1} معتبر نمی‌باشد.");
                     continue;
                 }
 
                 payslip.Year = year;
                 payslip.Month = month;
-                payslip.PersonnelCode = pc;
-                payslip.PersonnelId = p.Id;
+                payslip.EmployeeCode = ec;
                 payslip.DailySalary = ParseLong(row.Cell(4).GetString());
                 payslip.WorkingDays = ParseInt(row.Cell(5).GetString());
                 payslip.MonthlyBaseSalary = ParseLong(row.Cell(6).GetString());
@@ -91,56 +77,17 @@ public class PaySlipServices(AppDbContext dbContext, IPersonnelServices personne
                 payslip.CompanyDeductions = ParseLong(row.Cell(34).GetString());
                 payslip.NetPayable = ParseLong(row.Cell(35).GetString());
 
-                var existingPayslip = await _dbContext.Payslips
-                    .FirstOrDefaultAsync(ps =>
-                        ps.PersonnelCode == pc &&
-                        ps.Year == year &&
-                        ps.Month == month);
-
-                if (existingPayslip != null)
-                {
-                    result.Errors.Add($"فیش حقوقی پرسنل {pc} برای {year}/{month} قبلاً ثبت شده است.");
-                    continue;
-                }
-
                 payslips.Add(payslip);
             }
 
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        try
+        if (payslips.Any())
         {
-            _dbContext.Payslips.AddRange(payslips);
-            await _dbContext.SaveChangesAsync();
-            await transaction.CommitAsync();
-
-            result.IsPartialySuccess = true;
-            return result;
+            result.Status.IsPartialySuccess = true;
+            result.Data.Data = payslips;
         }
-        catch (Exception ex)
-        {
-            await transaction.RollbackAsync();
-            result.Errors.Add($"خطا در ذخیره‌سازی: {ex.Message}");
-            return result;
-        }
-    }
+        else
+            result.Status.IsPartialySuccess = false;
 
-    public async Task<Result> DownloadAsync(string personnelCode, int year, int month)
-    {
-        var result = new Result();
-        var payslip = await _dbContext.Payslips.Include(ps=>ps.Personnel).ThenInclude(p=>p.Department)
-            .FirstOrDefaultAsync(ps =>
-                ps.PersonnelCode == personnelCode &&
-                ps.Year == year.ToString() &&
-                ps.Month == month.ToString());
-
-        if (payslip == null)
-        {
-            result.Data = null;
-            return result;
-        }
-
-        result.Data = payslip;
-        result.IsPartialySuccess = true;
         return result;
     }
 

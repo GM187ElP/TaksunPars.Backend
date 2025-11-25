@@ -1,6 +1,6 @@
-﻿using TaksunPars.Core.Entities;
+﻿using IAM.Domain.Entities;
 
-namespace Payroll.Application.Services;
+namespace Payroll.Application.Common.Interfaces;
 
 public interface IAuthServices
 {

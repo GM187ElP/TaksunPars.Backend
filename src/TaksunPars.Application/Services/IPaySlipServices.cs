@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
-using TaksunPars.Shared;
+using Shared;
+using TaksunPars.Core.Entities;
 
 namespace TaksunPars.Application.Services;
 
 public interface IPaySlipServices
 {
-    Task<Result> UploadAsync(IFormFile paySlipFile);
+    Task<Result<List<Payslip>>> UploadAsync(IFormFile paySlipFile);
 
-    Task<Result> DownloadAsync(string personnelCode, int year, int month);
+    //Task<Result<List<Payslip>>> DownloadAsync(string personnelCode, int year, int month);
 }

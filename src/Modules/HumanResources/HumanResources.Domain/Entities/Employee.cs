@@ -1,12 +1,11 @@
-﻿using PersonnelInfo.Core.Enums;
-using System.ComponentModel;
-using TypeLite;
+﻿using HumanResources.Domain.Enums;
+using Shared.Interfaces;
 
 namespace HumanResources.Domain.Entities;
 
-public class Employee
+public class Employee:ISoftDelete
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
 
     #region Basic Information
     public int PersonnelCode { get; set; }
@@ -25,7 +24,7 @@ public class Employee
 
     #region Family Information
     public string FatherName { get; set; } = string.Empty;
-    public bool? IsMarried { get; set; } 
+    public bool? IsMarried { get; set; }
     public int ChildrenCount { get; set; } = 0;
     #endregion
 
@@ -39,7 +38,7 @@ public class Employee
     #region Birth and Place Information
     public DateTime? BirthDate { get; set; } = DateTime.Now;
     public long BirthPlaceId { get; set; }
-    public City? BirthPlace { get; set; } 
+    public City? BirthPlace { get; set; }
     #endregion
 
     #region Shenasname Issuance Information
@@ -67,7 +66,7 @@ public class Employee
 
     #region Contact Information
     public string InternalContactNumber { get; set; } = "0000";
-    public string? LandPhoneNumber { get; set; } 
+    public string? LandPhoneNumber { get; set; }
     public string Address { get; set; } = string.Empty;
     public string PostalCode { get; set; } = string.Empty;
     #endregion

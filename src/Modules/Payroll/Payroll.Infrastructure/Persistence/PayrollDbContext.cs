@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
+using Payroll.Domain.Entities;
 
-namespace Payroll.Infrastructure.Persistence
+namespace Payroll.Infrastructure.Persistence;
+
+public class PayrollDbContext : DbContext
 {
-    internal class PayrollDbContext
+    public PayrollDbContext(DbContextOptions<PayrollDbContext> options):base(options)
     {
+            
     }
+
+    public DbSet<Payslip> Payslips { get; set; }
 }

@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Shared.Interfaces;
 
-namespace IAM.Domain.Entities
+namespace IAM.Domain.Entities;
+
+public class Role : ISoftDelete
 {
-    internal class Role
-    {
-    }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string NormalizedName { get; set; }
+    public string ConcurrencyStamp { get; set; }
+    public bool IsDeleted { get; set; } = false;
+
+    public ICollection<UserRole> UserRoles { get; set; }
 }

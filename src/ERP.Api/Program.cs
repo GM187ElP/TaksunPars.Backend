@@ -1,5 +1,4 @@
 using ERP.Api.Services;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -46,9 +45,8 @@ builder.Services.AddAuthentication("Bearer")
 
             ValidIssuer = "Issuer",
             ValidAudience = "Audience",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        },
-            SecurityAlgorithms.HmacSha256
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        };
     });
 
 builder.Services.AddAuthorization();
