@@ -1,13 +1,18 @@
-using ERP.Api.Services;
+using HumanResources.Domain.Interfaces;
+using HumanResources.Infrastructure.Persistence;
+using HumanResources.Infrastructure.Repositories;
+using IAM.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Npgsql;
-using QuestPDF.Infrastructure;
+using Payroll.Application.Common.Interfaces;
+using Payroll.Domain.Interfaces;
+using Payroll.Infrastructure.Parsing;
+using Payroll.Infrastructure.Persistence;
+using Payroll.Infrastructure.Repositories;
+using Shared.Interfaces;
 using System.Text;
-using TaksunPars.Application.Services;
-using TaksunPars.Infrastructure.Data;
-using TaksunPars.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +20,33 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Register application services
-builder.Services.AddScoped<IAuthServices, AuthServices>();
-builder.Services.AddScoped<IPaySlipServices, PaySlipServices>();
-builder.Services.AddScoped<IPersonnelServices, PersonnelServices>();
-builder.Services.AddScoped<IPayslipServices, TaksunPars.Api.Services.PayslipServices>();
-QuestPDF.Settings.License = LicenseType.Community;
+
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(HumanResources.Application.AssemblyMarker).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(IAM.Application.AssemblyMarker).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(Payroll.Application.AssemblyMarker).Assembly);
+});
+
+builder.Services.AddScoped<IJobTitleRepository, JobTitleRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<IProvinceRepository, ProvinceRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IBankAccountRepository, BankAccountRepository>();
+builder.Services.AddScoped<IBankNameRepository, BankNameRepository>();
+builder.Services.AddScoped<IChequePromissionaryNoteRepository, ChequePromissionaryNoteRepository>();
+builder.Services.AddScoped<ITrackJobTitleAndLeaveHistoryRepository, TrackJobTitleAndLeaveHistoryRepository>();
+
+
+builder.Services.AddScoped<IEmployeeLookupService, EmployeeLookupService>();
+
+builder.Services.AddScoped<IPayslipRepository, PayslipRepository>();
+builder.Services.AddScoped<IExcelPayslipParser, ClosedXmlPayslipParser>();
+
+
+
 
 
 // CORS
@@ -101,10 +128,23 @@ Console.WriteLine(
     $"✅ Connection string built: Host={cs.Host}, Database={cs.Database}, Username={cs.Username}, PasswordSet={(!string.IsNullOrEmpty(cs.Password))}"
 );
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<HumanResourcesDbContext>(options =>
 {
     options.UseNpgsql(cs.ToString());
 });
+
+builder.Services.AddDbContext<PayrollDbContext>(options =>
+{
+    options.UseNpgsql(cs.ToString());
+});
+
+builder.Services.AddDbContext<IAMDbContext>(options =>
+{
+    options.UseNpgsql(cs.ToString());
+});
+
+
+
 
 
 var app = builder.Build();

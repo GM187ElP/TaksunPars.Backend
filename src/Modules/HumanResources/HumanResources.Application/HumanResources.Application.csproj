@@ -7,9 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\Commands\" />
-    <Folder Include="Handlers\Queries\" />
+    <Folder Include="Handlers\Commands\ChequePromissionaryNote\" />
+    <Folder Include="Handlers\Commands\JobTitle\" />
+    <Folder Include="Handlers\Commands\TrackJobTitleAndLeaveHistory\" />
+    <Folder Include="Handlers\Queries\BankAccount\" />
+    <Folder Include="Handlers\Queries\BankName\" />
+    <Folder Include="Handlers\Queries\ChequePromissionaryNote\" />
+    <Folder Include="Handlers\Queries\Employee\" />
+    <Folder Include="Handlers\Queries\TrackJobTitleAndLeaveHistory\" />
     <Folder Include="Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="13.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\HumanResources.Domain\HumanResources.Domain.csproj" />
   </ItemGroup>
 
 </Project>

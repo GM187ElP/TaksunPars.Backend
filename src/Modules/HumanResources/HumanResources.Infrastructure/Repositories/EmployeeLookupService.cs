@@ -1,10 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using HumanResources.Domain.Interfaces;
+using Shared.Interfaces;
 
-namespace HumanResources.Infrastructure.Repositories
+namespace HumanResources.Infrastructure.Repositories;
+
+public class EmployeeLookupService : IEmployeeLookupService
 {
-    internal class EmployeeLookupService
+    private readonly IEmployeeRepository _employeeRepository;
+
+    public EmployeeLookupService(IEmployeeRepository employeeRepository)
     {
+        _employeeRepository = employeeRepository;
+    }
+
+    public async Task<Guid?> GetEmployeeIdByCodeAsync(string code, CancellationToken ct)
+    {
+        return await _employeeRepository.GetEmployeeIdByCodeAsync(code, ct);
     }
 }

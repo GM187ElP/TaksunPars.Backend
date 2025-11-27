@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PersonnelInfo.Infrastructure.Configuration.EntitiesConfiguration;
+namespace HumanResources.Infrastructure.Persistence.Configurations;
 public class EntityConfig
 {
 

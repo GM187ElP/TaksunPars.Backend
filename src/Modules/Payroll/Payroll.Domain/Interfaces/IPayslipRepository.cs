@@ -5,7 +5,6 @@ namespace Payroll.Domain.Interfaces;
 
 public interface IPayslipRepository
 {
-    //Task AddAsync(Payslip payslip, CancellationToken ct);
-    Task AddRangeAsync(Result<List<Payslip>> payslips, CancellationToken ct);
-    //Task<Payslip?> GetByIdAsync(Guid id, CancellationToken ct);
+    Task<ResultStatus> AddRangeAsync(Result<List<Payslip>> payslips, CancellationToken ct);
+    Task<Result<Payslip>> GetPayslipByEmployeeCode(string employeeCode, int year, int month, CancellationToken ct);
 }

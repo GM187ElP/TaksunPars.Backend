@@ -2,13 +2,13 @@
 
 namespace HumanResources.Domain.Entities;
 
-public class StartLeaveHistory:ISoftDelete
+public class TrackJobTitleAndLeaveHistory:ISoftDelete
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
     public string JobTitle { get; set; } = string.Empty;
     public DateTime StartedDate { get; set; }
     public DateTime LeftDate { get; set; }
-    public long EmployeeId { get; set; }
+    public Guid EmployeeId { get; set; }
     public Employee? Employee { get; set; }
 
     public bool IsDeleted { get; set; }

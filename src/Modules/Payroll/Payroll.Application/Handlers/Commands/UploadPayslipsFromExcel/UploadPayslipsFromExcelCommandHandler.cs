@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Payroll.Application.Common.Interfaces;
 using Payroll.Domain.Interfaces;
+using Shared;
 
 namespace Payroll.Application.Handlers.Commands.UploadPayslipsFromExcel;
 
-public class UploadPayslipsFromExcelCommandHandler : IRequestHandler<UploadPayslipsFromExcelCommand,int>
+public class UploadPayslipsFromExcelCommandHandler : IRequestHandler<UploadPayslipsFromExcelCommand, ResultStatus>
 {
     private readonly IPayslipRepository _repo;
     private readonly IExcelPayslipParser _parser;
@@ -15,11 +16,13 @@ public class UploadPayslipsFromExcelCommandHandler : IRequestHandler<UploadPaysl
         _repo = repo;
     }
 
-    public async Task<int> Handle(UploadPayslipsFromExcelCommand request, CancellationToken cancellationToken)
+    public async Task<ResultStatus> Handle(UploadPayslipsFromExcelCommand request, CancellationToken cancellationToken)
     {
         var result = _parser.Parse(request.excelStream);
-        if(result.IsPartialySuccess)
-        await _repo.AddRangeAsync(payslips, cancellationToken);
-        return 2;
+
+        if (result.Status.IsPartialySuccess)
+            return await _repo.AddRangeAsync(result, cancellationToken);
+        else
+            return result.Status;
     }
 }

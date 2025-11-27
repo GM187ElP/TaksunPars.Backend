@@ -23,7 +23,7 @@
   </Folder>
   <Folder Name="/src/UI/" />
   <Folder Name="/src/UI/Blazor/">
-    <Project Path="E:/C/CS/TasksunPars/TasksunPars/src/ERP.UI/Blazor/ERP.UI.Blazor/ERP.UI.Blazor.csproj" />
+    <Project Path="../TasksunPars/src/ERP.UI/Blazor/ERP.UI.Blazor/ERP.UI.Blazor/ERP.UI.Blazor.csproj" Id="2dc74f4d-78a1-4213-a375-76d4ff845a23" />
   </Folder>
   <Folder Name="/src/zzzzzzzzzz/" />
   <Folder Name="/tests/" />

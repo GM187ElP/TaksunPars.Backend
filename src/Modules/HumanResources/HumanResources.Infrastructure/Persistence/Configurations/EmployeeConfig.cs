@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace PersonnelInfo.Infrastructure.Configuration.EntitiesConfiguration;
+namespace HumanResources.Infrastructure.Persistence.Configurations;
 
 public class EmployeeConfig : IEntityTypeConfiguration<Employee>
 {
@@ -10,7 +10,10 @@ public class EmployeeConfig : IEntityTypeConfiguration<Employee>
     {
         //var dateDelimiter = '-';
         RelationalEntityTypeBuilderExtensions.ToTable(builder, "Employees");
-        builder.HasIndex(e => e.PersonnelCode).IsUnique();
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("gen_random_uuid()");
+        builder.HasIndex(e => e.EmployeeCode).IsUnique();
         builder.HasIndex(e => e.NationalId).IsUnique();
         builder.HasIndex(e => e.ContactNumber).IsUnique();
 
@@ -35,7 +38,7 @@ public class EmployeeConfig : IEntityTypeConfiguration<Employee>
         builder.HasOne(e => e.SuperVisor).WithMany(e => e.Employees).HasForeignKey(e => e.SupervisorId).OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(e => e.ChequePromissionaryNotes).WithOne(c => c.Employee).HasForeignKey(c => c.EmployeeId).OnDelete(DeleteBehavior.Restrict);
-        builder.HasMany(e => e.StartLeftHistories).WithOne(s => s.Employee).HasForeignKey(s => s.EmployeeId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasMany(e => e.TrackJobTitleAndLeaveHistories).WithOne(s => s.Employee).HasForeignKey(s => s.EmployeeId).OnDelete(DeleteBehavior.Restrict);
         builder.HasMany(e => e.BankAccounts).WithOne(b => b.Employee).HasForeignKey(b => b.EmployeeId).OnDelete(DeleteBehavior.Restrict);
 
         #region Conversions

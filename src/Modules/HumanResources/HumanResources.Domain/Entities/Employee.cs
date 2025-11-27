@@ -8,7 +8,7 @@ public class Employee:ISoftDelete
     public Guid Id { get; set; }
 
     #region Basic Information
-    public int PersonnelCode { get; set; }
+    public string EmployeeCode { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string NationalId { get; set; } = string.Empty;
@@ -18,13 +18,12 @@ public class Employee:ISoftDelete
 
     #region Gender and Status
     public GenderType GenderDisplay { get; set; } = GenderType.NotSelected;
-    public Guid? UserId { get; set; }
     public WorkingStatusType WorkingStatusDisplay { get; set; } = WorkingStatusType.Working;
     #endregion
 
     #region Family Information
     public string FatherName { get; set; } = string.Empty;
-    public bool? IsMarried { get; set; }
+    public MaritalStatusType MaritalStatusDisplay { get; set; }
     public int ChildrenCount { get; set; } = 0;
     #endregion
 
@@ -54,12 +53,12 @@ public class Employee:ISoftDelete
     #endregion
 
     #region Employment Information
-    public string DepartmentId { get; set; } = string.Empty;
-    public JobTitle? JobTitle { get; set; }
+    public Guid DepartmentId { get; set; } 
+    public JobTitle JobTitle { get; set; }
     public EmploymentType EmploymentTypeDisplay { get; set; } = EmploymentType.Official;
     public DateTime? StartingDate { get; set; } = DateTime.Now;
     public DateTime? LeavingDate { get; set; } // nullable
-    public long? SupervisorId { get; set; }
+    public Guid? SupervisorId { get; set; }
     public Employee? SuperVisor { get; set; }
     public ICollection<Employee> Employees { get; set; } = [];
     #endregion
@@ -78,7 +77,7 @@ public class Employee:ISoftDelete
 
     #region Collection Properties
     public ICollection<ChequePromissionaryNote> ChequePromissionaryNotes { get; set; } = [];
-    public ICollection<StartLeaveHistory> StartLeftHistories { get; set; } = [];
+    public ICollection<TrackJobTitleAndLeaveHistory> TrackJobTitleAndLeaveHistories { get; set; } = [];
     public ICollection<BankAccount> BankAccounts { get; set; } = [];
     #endregion
 }

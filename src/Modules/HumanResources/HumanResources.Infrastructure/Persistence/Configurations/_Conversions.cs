@@ -1,7 +1,7 @@
 using HumanResources.Domain.Enums;
 using System.Globalization;
 
-namespace PersonnelInfo.Infrastructure.Configuration.EntitiesConfiguration
+namespace HumanResources.Infrastructure.Persistence.Configurations
 {
     public class Conversions
     {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Shared.Interfaces;
 
-namespace Shared.Interfaces
+public interface IEmployeeLookupService
 {
-    internal interface IEmployeeLookupService
-    {
-    }
+    Task<Guid?> GetEmployeeIdByCodeAsync(string employeeCode, CancellationToken ct);
 }
