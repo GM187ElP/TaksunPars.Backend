@@ -1,5 +1,5 @@
-﻿using HumanResources.Domain.Entities;
-using HumanResources.Domain.Interfaces;
+﻿using HumanResources.Application.Interfaces;
+using HumanResources.Domain.Entities;
 using HumanResources.Infrastructure.Persistence;
 using Shared;
 

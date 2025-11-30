@@ -1,4 +1,4 @@
-﻿using HumanResources.Domain.Interfaces;
+﻿using HumanResources.Application.Interfaces;
 using HumanResources.Infrastructure.Persistence;
 
 namespace HumanResources.Infrastructure.Repositories;

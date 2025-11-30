@@ -1,4 +1,4 @@
-﻿using HumanResources.Application.DTOs.Conversions;
+﻿using HumanResources.Application.Conversions;
 using Shared;
 
 namespace HumanResources.Application.DTOs;

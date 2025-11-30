@@ -15,7 +15,6 @@
     <Folder Include="Handlers\Queries\ChequePromissionaryNote\" />
     <Folder Include="Handlers\Queries\Employee\" />
     <Folder Include="Handlers\Queries\TrackJobTitleAndLeaveHistory\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿using HumanResources.Domain.Enums;
-using Shared.Interfaces;
+using HumanResources.Domain.Interfaces;
 
 namespace HumanResources.Domain.Entities;
 
@@ -8,71 +8,71 @@ public class Employee:ISoftDelete
     public Guid Id { get; set; }
 
     #region Basic Information
-    public string EmployeeCode { get; set; }
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string NationalId { get; set; } = string.Empty;
-    public string ContactNumber { get; set; } = string.Empty;
+    public string? EmployeeCode { get; set; }
+    public string? FirstName { get; set; } 
+    public string? LastName { get; set; } 
+    public string? NationalId { get; set; } 
+    public string? ContactNumber { get; set; }
     public bool IsDeleted { get; set; } = false;
     #endregion
 
     #region Gender and Status
-    public GenderType GenderDisplay { get; set; } = GenderType.NotSelected;
-    public WorkingStatusType WorkingStatusDisplay { get; set; } = WorkingStatusType.Working;
+    public GenderType? GenderDisplay { get; set; }
+    public WorkingStatusType? WorkingStatusDisplay { get; set; } 
     #endregion
 
     #region Family Information
-    public string FatherName { get; set; } = string.Empty;
-    public MaritalStatusType MaritalStatusDisplay { get; set; }
-    public int ChildrenCount { get; set; } = 0;
+    public string? FatherName { get; set; } 
+    public MaritalStatusType? MaritalStatusDisplay { get; set; }
+    public int? ChildrenCount { get; set; } 
     #endregion
 
     #region Identity Information
-    public string ShenasnameNumber { get; set; } = string.Empty;
-    public string ShenasnameSerialLetter { get; set; } = string.Empty;
-    public string ShenasnameSerie { get; set; } = string.Empty;
-    public string ShenasnameSerial { get; set; } = string.Empty;
+    public string? ShenasnameNumber { get; set; } 
+    public string? ShenasnameSerialLetter { get; set; } 
+    public string? ShenasnameSerie { get; set; } 
+    public string? ShenasnameSerial { get; set; } 
     #endregion
 
     #region Birth and Place Information
-    public DateTime? BirthDate { get; set; } = DateTime.Now;
-    public long BirthPlaceId { get; set; }
+    public DateTime? BirthDate { get; set; } 
+    public Guid BirthPlaceId { get; set; }  // fk
     public City? BirthPlace { get; set; }
     #endregion
 
     #region Shenasname Issuance Information
-    public long ShenasnameIssuedPlaceId { get; set; }
+    public Guid ShenasnameIssuedPlaceId { get; set; }  // fk
     public City? ShenasnameIssuedPlace { get; set; }
     #endregion
 
     #region Insurance Information
-    public string InsurranceCode { get; set; } = string.Empty;
-    public string InsurranceStatus { get; set; } = string.Empty;
-    public bool HasInsurance { get; set; } = true;
-    public int ExtraInsurranceCount { get; set; } = 0;
+    public string? InsurranceCode { get; set; } 
+    public string? InsurranceStatus { get; set; } 
+    public bool? HasInsurance { get; set; } 
+    public int? ExtraInsurranceCount { get; set; } 
     #endregion
 
     #region Employment Information
-    public Guid DepartmentId { get; set; } 
-    public JobTitle JobTitle { get; set; }
-    public EmploymentType EmploymentTypeDisplay { get; set; } = EmploymentType.Official;
-    public DateTime? StartingDate { get; set; } = DateTime.Now;
-    public DateTime? LeavingDate { get; set; } // nullable
-    public Guid? SupervisorId { get; set; }
+    public Guid JobTitleId { get; set; }   // fk
+    public JobTitle? JobTitle { get; set; }
+    public EmploymentType? EmploymentTypeDisplay { get; set; }
+    public DateTime? StartingDate { get; set; } 
+    public DateTime? LeavingDate { get; set; } 
+    public Guid? SupervisorId { get; set; }   // null fk
     public Employee? SuperVisor { get; set; }
     public ICollection<Employee> Employees { get; set; } = [];
     #endregion
 
     #region Contact Information
-    public string InternalContactNumber { get; set; } = "0000";
+    public string? InternalContactNumber { get; set; } 
     public string? LandPhoneNumber { get; set; }
-    public string Address { get; set; } = string.Empty;
-    public string PostalCode { get; set; } = string.Empty;
+    public string? Address { get; set; } 
+    public string? PostalCode { get; set; } 
     #endregion
 
     #region Academic Information
-    public string MostRecentDegree { get; set; } = string.Empty;
-    public string Major { get; set; } = string.Empty;
+    public string? MostRecentDegree { get; set; } 
+    public string? Major { get; set; } 
     #endregion
 
     #region Collection Properties

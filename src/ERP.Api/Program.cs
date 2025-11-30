@@ -1,18 +1,18 @@
-using HumanResources.Domain.Interfaces;
+using ERP.Api.DTOs;
+using ERP.Api.Services;
+using HumanResources.Application.Interfaces;
 using HumanResources.Infrastructure.Persistence;
 using HumanResources.Infrastructure.Repositories;
+using IAM.Application.DTOs;
 using IAM.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using Npgsql;
 using Payroll.Application.Common.Interfaces;
 using Payroll.Domain.Interfaces;
 using Payroll.Infrastructure.Parsing;
 using Payroll.Infrastructure.Persistence;
 using Payroll.Infrastructure.Repositories;
 using Shared.Interfaces;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +20,58 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Register application services
+//-----------------------------------------------------------------------------------------------
 
+builder.Configuration.AddEnvironmentVariables();
+string? passwordSalt = builder.Configuration["PasswordSalt"];
+string? dbPass = builder.Configuration["NpgPassword"];
+var jwtSettings = new JwtSettings
+{
+    Issuer = builder.Configuration["JwtIssuer"],
+    Audience = builder.Configuration["JwtAudience"],
+    Secret = builder.Configuration["JwtSecret"]
+};
+
+var dbData = new DbData
+{
+    // Local DB
+    LocalHost = builder.Configuration["LocalDb_Host"],
+    LocalUsername = builder.Configuration["LocalDb_Username"],
+    LocalPassword = builder.Configuration["LocalDb_Password"],
+    LocalDatabaseDev = builder.Configuration["LocalDb_Database_Dev"],
+    LocalDatabaseProd = builder.Configuration["LocalDb_Database_Prod"],
+
+    // Neon DB
+    NeonHostDev = builder.Configuration["NeonDb_Host_Dev"],
+    NeonHostProd = builder.Configuration["NeonDb_Host_Prod"],
+    NeonUsername = builder.Configuration["NeonDb_Username"],
+    NeonPasswordDev = builder.Configuration["NeonDb_Password_Dev"],
+    NeonPasswordProd = builder.Configuration["NeonDb_Password_Prod"],
+    NeonDatabase = builder.Configuration["NeonDb_Database"],
+};
+
+builder.Services.AddSingleton(passwordSalt);
+builder.Services.AddSingleton(jwtSettings);
+builder.Services.AddSingleton(dbData);
+
+var cs = DbConnectionStringFactory.BuildConnectionString(builder.Environment, dbData);
+
+builder.Services.AddDbContext<HumanResourcesDbContext>(options =>
+{
+    options.UseNpgsql(cs.ToString());
+});
+
+builder.Services.AddDbContext<PayrollDbContext>(options =>
+{
+    options.UseNpgsql(cs.ToString());
+});
+
+builder.Services.AddDbContext<IAMDbContext>(options =>
+{
+    options.UseNpgsql(cs.ToString());
+});
+
+//-----------------------------------------------------------------------------------------------
 
 builder.Services.AddMediatR(cfg =>
 {
@@ -45,10 +96,7 @@ builder.Services.AddScoped<IEmployeeLookupService, EmployeeLookupService>();
 builder.Services.AddScoped<IPayslipRepository, PayslipRepository>();
 builder.Services.AddScoped<IExcelPayslipParser, ClosedXmlPayslipParser>();
 
-
-
-
-
+//-----------------------------------------------------------------------------------------------
 // CORS
 builder.Services.AddCors(options =>
 {
@@ -60,45 +108,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-
-            ValidIssuer = "Issuer",
-            ValidAudience = "Audience",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
-        };
-    });
 
 builder.Services.AddAuthorization();
 
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowBlazor",
-//        policy =>
-//        {
-//            policy.AllowAnyOrigin()
-//                  .AllowAnyMethod()
-//                  .AllowAnyHeader();
-//        });
-//});
-
-// Secrets for development
-if (builder.Environment.IsDevelopment())
-{
-    builder.Configuration.AddJsonFile(
-        Path.Combine("Private", "secrets.json"),
-        optional: false,
-        reloadOnChange: true
-    );
-}
 
 // Swagger / Swashbuckle
 builder.Services.AddSwaggerGen(options =>
@@ -110,38 +122,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Connection string
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found in appsettings.json");
 
-var dbPassword = builder.Configuration["secrets:Password"]
-    ?? throw new InvalidOperationException("Database password not found. Check Private/secrets.json");
 
-Console.WriteLine($"✅ Password loaded successfully: {dbPassword.Length} characters");
-
-var cs = new NpgsqlConnectionStringBuilder(connectionString)
-{
-    Password = dbPassword
-};
-
-Console.WriteLine(
-    $"✅ Connection string built: Host={cs.Host}, Database={cs.Database}, Username={cs.Username}, PasswordSet={(!string.IsNullOrEmpty(cs.Password))}"
-);
-
-builder.Services.AddDbContext<HumanResourcesDbContext>(options =>
-{
-    options.UseNpgsql(cs.ToString());
-});
-
-builder.Services.AddDbContext<PayrollDbContext>(options =>
-{
-    options.UseNpgsql(cs.ToString());
-});
-
-builder.Services.AddDbContext<IAMDbContext>(options =>
-{
-    options.UseNpgsql(cs.ToString());
-});
 
 
 

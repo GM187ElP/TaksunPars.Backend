@@ -1,4 +1,5 @@
 ﻿using HumanResources.Domain.Entities;
+using HumanResources.Infrastructure.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace HumanResources.Infrastructure.Persistence;
@@ -19,4 +20,9 @@ public class HumanResourcesDbContext : DbContext
     public DbSet<TrackJobTitleAndLeaveHistory> StartLeaveHistories { get; set; }
     public DbSet<Province> Provinces { get; set; }
     public DbSet<Department> Departments { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(HRConfigurationsMarker).Assembly);
+    }
 }

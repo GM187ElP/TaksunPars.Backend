@@ -1,5 +1,5 @@
-﻿using HumanResources.Domain.Entities;
-using HumanResources.Domain.Interfaces;
+﻿using HumanResources.Application.Interfaces;
+using HumanResources.Domain.Entities;
 using HumanResources.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Shared;
@@ -26,9 +26,10 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<ResultStatus> AddAsync(Employee employee, CancellationToken cancellationToken)
     {
-        var result = new ResultStatus();
         await _db.Employees.AddAsync(employee, cancellationToken);
         var changesCount = await _db.SaveChangesAsync(cancellationToken);
+
+        var result = new ResultStatus();
         if (changesCount > 0)
             result.IsPartialySuccess = true;
         else
@@ -36,13 +37,26 @@ public class EmployeeRepository : IEmployeeRepository
         return result;
     }
 
-    public async Task<Guid?> GetEmployeeIdByCodeAsync(string code, CancellationToken ct)
+    public async Task<Guid?> GetEmployeeIdByCodeAsync(string code, CancellationToken cancellationToken)
     {
         return await _db.Employees
             .Where(e => e.EmployeeCode == code)
             .AsNoTracking()
             .Select(e => e.Id)
-            .FirstOrDefaultAsync(ct);
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<Employee?> GetEmployeeByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _db.Employees.FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<Guid?> GetEmployeeIdByNationalIdAsync(string nationalId, CancellationToken cancellationToken)
+    {
+        var employee=await _db.Employees.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.NationalId == nationalId);
+
+        return employee?.Id;
     }
 }
 

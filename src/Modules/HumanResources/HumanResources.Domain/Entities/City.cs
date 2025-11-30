@@ -1,4 +1,4 @@
-﻿using Shared.Interfaces;
+﻿using HumanResources.Domain.Interfaces;
 
 namespace HumanResources.Domain.Entities;
 
@@ -10,7 +10,7 @@ public class City:ISoftDelete
     public bool IsCapital { get; set; }
     public bool IsDeleted { get; set; } = false;
 
-    public Province Province { get; set; }
+    public Province? Province { get; set; }
     public ICollection<Employee> BirthPlaces { get; set; } = [];
     public ICollection<Employee> ShenasnameIssuedPlaces { get; set; } = [];
 }

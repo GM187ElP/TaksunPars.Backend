@@ -1,7 +1,8 @@
-﻿using HumanResources.Application.DTOs.Conversions;
-using HumanResources.Domain.Interfaces;
+﻿using HumanResources.Application.Conversions;
+using HumanResources.Application.Interfaces;
 using MediatR;
 using Shared;
+using Shared.Conversions;
 
 namespace HumanResources.Application.Handlers.Commands.Employee;
 

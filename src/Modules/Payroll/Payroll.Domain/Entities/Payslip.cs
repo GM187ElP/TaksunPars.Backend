@@ -1,4 +1,4 @@
-﻿using Shared.Interfaces;
+﻿using Payroll.Domain.Interfaces;
 
 namespace Payroll.Domain.Entities;
 
@@ -7,11 +7,11 @@ public class Payslip : ISoftDelete
     public Guid Id { get; set; }
 
     // کد پرسنلی - Personnel Reference
-    public string EmployeeCode { get; set; } // Common between personnel and payslip
+    public string? EmployeeCode { get; set; } // Common between personnel and payslip
 
     // سال و ماه
-    public string Year { get; set; } // سال
-    public string Month { get; set; } // ماه
+    public string? Year { get; set; } // سال
+    public string? Month { get; set; } // ماه
 
     // حقوق و دستمزد
     public long? DailySalary { get; set; } // حقوق روزانه

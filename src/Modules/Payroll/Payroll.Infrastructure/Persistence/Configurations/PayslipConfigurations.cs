@@ -9,6 +9,8 @@ public class PayslipConfigurations : IEntityTypeConfiguration<Payslip>
 {
     public void Configure(EntityTypeBuilder<Payslip> builder)
     {
+        RelationalEntityTypeBuilderExtensions.ToTable(builder, "Payslips", "payroll");
+
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Id)
@@ -16,7 +18,7 @@ public class PayslipConfigurations : IEntityTypeConfiguration<Payslip>
 
         builder.Property(p => p.EmployeeCode)
             .IsRequired()
-            .HasMaxLength(21);
+            .HasMaxLength(5);
 
         builder.HasIndex(p => p.EmployeeCode)
            .IsUnique();

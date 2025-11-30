@@ -8,18 +8,13 @@ public class RoleConfigurations : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {
+        RelationalEntityTypeBuilderExtensions.ToTable(builder, "Roles", "iam");
+
         builder.HasKey(r => r.Id);
 
         builder.Property(r => r.Id)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql("gen_random_uuid()");
-
-        builder.Property(r => r.Name)
-            .IsRequired()
-            .HasMaxLength(210);
-
-        builder.Property(r => r.NormalizedName)
-            .HasMaxLength(210);
 
         builder.HasIndex(r => r.NormalizedName)
             .IsUnique();

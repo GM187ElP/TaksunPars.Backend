@@ -1,8 +1,13 @@
-﻿namespace HumanResources.Domain.Entities;
+﻿using HumanResources.Domain.Interfaces;
 
-public class Province
+namespace HumanResources.Domain.Entities;
+
+public class Province:ISoftDelete
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
+    public string? Name { get; set; }
+    public bool IsDeleted { get; set; } = false;
+
+    public ICollection<City> Cities { get; set; } = [];
 }
 

@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HumanResources.Domain\HumanResources.Domain.csproj" />
+    <ProjectReference Include="..\HumanResources.Application\HumanResources.Application.csproj" />
   </ItemGroup>
 
 </Project>

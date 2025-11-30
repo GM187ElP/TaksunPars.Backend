@@ -7,19 +7,16 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
 {
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<User> builder)
     {
+        RelationalEntityTypeBuilderExtensions.ToTable(builder, "Users", "iam");
+
         builder.HasKey(u => u.Id);
 
         builder.Property(u => u.Id)
             .ValueGeneratedOnAdd()
             .HasDefaultValueSql("gen_random_uuid()");
 
-        builder.Property(u => u.Username)
-            .IsRequired()
-            .HasMaxLength(210);
-
-        builder.Property(u => u.PasswordHash)
-            .IsRequired()
-            .HasMaxLength(512);
+        builder.HasIndex(u => u.Username)
+            .IsUnique();
 
         builder.Property(u => u.ConcurrencyStamp)
             .IsConcurrencyToken();

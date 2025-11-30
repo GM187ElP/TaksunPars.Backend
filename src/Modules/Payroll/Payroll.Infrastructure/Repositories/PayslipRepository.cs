@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Payroll.Application.Common.Interfaces;
 using Payroll.Domain.Entities;
-using Payroll.Domain.Interfaces;
 using Payroll.Infrastructure.Persistence;
 using Shared;
 using Shared.Interfaces;
@@ -19,11 +19,11 @@ public class PayslipRepository : IPayslipRepository
         _employeeLookupService = employeeLookupService;
     }
 
-    public async Task<ResultStatus> AddRangeAsync(Result<List<Payslip>> payslips, CancellationToken ct)
+    public async Task<ResultStatus> AddRangeAsync(Result<List<Payslip>> payslips, CancellationToken cancellationToken)
     {
         foreach (var p in payslips.Data.Data)
         {
-            var employeeId = await _employeeLookupService.GetEmployeeIdByCodeAsync(p.EmployeeCode, ct);
+            var employeeId = await _employeeLookupService.GetEmployeeIdByCodeAsync(p.EmployeeCode, cancellationToken);
 
             if (employeeId == null || employeeId == Guid.Empty)
             {
@@ -37,7 +37,7 @@ public class PayslipRepository : IPayslipRepository
                 .FirstOrDefaultAsync(x =>
                     x.EmployeeCode == p.EmployeeCode &&
                     x.Year == p.Year &&
-                    x.Month == p.Month, ct);
+                    x.Month == p.Month, cancellationToken);
 
             if (existing != null)
             {
@@ -47,7 +47,7 @@ public class PayslipRepository : IPayslipRepository
             _db.Payslips.Add(p);
         }
 
-        var changesCount = await _db.SaveChangesAsync(ct);
+        var changesCount = await _db.SaveChangesAsync(cancellationToken);
 
         if (changesCount > 0)
             payslips.Status.IsPartialySuccess = true;
@@ -57,26 +57,11 @@ public class PayslipRepository : IPayslipRepository
         return payslips.Status;
     }
 
-    public async Task<Result<Payslip>> GetPayslipByEmployeeCode(string employeeCode, int year, int month, CancellationToken ct)
+    public async Task<Payslip?> GetPayslipByEmployeeCode(string employeeCode, string year, string month, CancellationToken cancellationToken)
     {
-        Result<Payslip> result = new();
-
-        var payslip = await _db.Payslips
+        return await _db.Payslips
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.EmployeeCode == employeeCode && x.Year == year.ToString() && x.Month == month.ToString(), ct);
-
-        if (payslip != null)
-        {
-            result.Data.Data = payslip; 
-            result.Status.IsPartialySuccess = true;
-        }
-        else
-        {
-            result.Status.Errors.Add($"Payslip not found for {employeeCode} in {month}/{year}.");
-            result.Status.IsPartialySuccess = false;  
-        }
-
-        return result;
+            .FirstOrDefaultAsync(x => x.EmployeeCode == employeeCode && x.Year == year && x.Month == month, cancellationToken);
     }
 
 }
